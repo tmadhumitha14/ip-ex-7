@@ -1,0 +1,219 @@
+// program 1
+//prime numbers
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/PrimeCheckServlet")
+public class PrimeCheckServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int number = Integer.parseInt(request.getParameter("number"));
+        
+        boolean isPrime = checkPrime(number);
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        out.println("<html><head><title>Prime Check Result</title></head><body>");
+        out.println("<h2>Prime Check Result</h2>");
+        out.println("Number: " + number + "<br>");
+        out.println("Is Prime: " + isPrime + "<br>");
+        out.println("</body></html>");
+    }
+    
+    private boolean checkPrime(int number) {
+        if (number <= 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+html code
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prime Number Checker</title>
+</head>
+<body>
+    <h2>Prime Number Checker</h2>
+    <form action="PrimeCheckServlet" method="post">
+        Enter a number: <input type="text" name="number"><br><br>
+        <input type="submit" value="Check">
+    </form>
+</body>
+</html>
+
+// program 2
+list of sports questions
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/SportsQuestionsServlet")
+public class SportsQuestionsServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        // Display the list of sports questions
+        out.println("<html><head><title>Sports Questions</title></head><body>");
+        out.println("<h2>Sports Questions</h2>");
+        out.println("<ul>");
+        out.println("<li><a href='RosterServlet?sport=football'>Football Roster</a></li>");
+        out.println("<li><a href='RosterServlet?sport=basketball'>Basketball Roster</a></li>");
+        out.println("<li><a href='RosterServlet?sport=baseball'>Baseball Roster</a></li>");
+        // Add more sports questions as needed
+        out.println("</ul>");
+        out.println("</body></html>");
+    }
+}
+
+
+roster servlet
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/RosterServlet")
+public class RosterServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String sport = request.getParameter("sport");
+        String roster = getRosterForSport(sport);
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        // Display the roster for the selected sport
+        out.println("<html><head><title>" + sport + " Roster</title></head><body>");
+        out.println("<h2>" + sport + " Roster</h2>");
+        out.println("<p>" + roster + "</p>");
+        out.println("</body></html>");
+    }
+    
+    private String getRosterForSport(String sport) {
+        // Dummy method to retrieve roster based on the selected sport
+        // Replace this with your actual logic to fetch the roster
+        switch (sport) {
+            case "football":
+                return "Football Roster: John Doe, Jane Smith, etc.";
+            case "basketball":
+                return "Basketball Roster: Mike Johnson, Sarah Lee, etc.";
+            case "baseball":
+                return "Baseball Roster: Tom Brown, Emily Green, etc.";
+            default:
+                return "No roster available for this sport.";
+        }
+    }
+}
+
+
+
+// program 3
+user preferences
+import java.io.IOException;
+import java.net.URLEncoder;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/UserPreferencesServlet")
+public class UserPreferencesServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String language = request.getParameter("language");
+        
+        // Store user preferences in cookies
+        Cookie nameCookie = new Cookie("name", URLEncoder.encode(name, "UTF-8"));
+        Cookie emailCookie = new Cookie("email", email);
+        Cookie languageCookie = new Cookie("language", language);
+        response.addCookie(nameCookie);
+        response.addCookie(emailCookie);
+        response.addCookie(languageCookie);
+        
+        // Redirect user to greeting page
+        response.sendRedirect("GreetingServlet");
+    }
+}
+
+html 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Preferences Form</title>
+</head>
+<body>
+    <h2>User Preferences Form</h2>
+    <form action="UserPreferencesServlet" method="post">
+        Name: <input type="text" name="name"><br><br>
+        Email: <input type="email" name="email"><br><br>
+        Preferred Language:
+        <select name="language">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <!-- Add more language options as needed -->
+        </select><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
